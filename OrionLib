@@ -659,18 +659,6 @@ function OrionLib:MakeWindow(WindowConfig)
 
 	AddConnection(UserInputService.InputBegan, function(Input)
 		if Input.KeyCode == Enum.KeyCode.L and UIHidden then
-			MainWindow.Visible = false
-		  UIHidden = true
-		  OrionLib:MakeNotification({
-			  Name = "Interface Hidden",
-			  Content = "Tap  to reopen the interface",
-			  Time = 5
-      })
-		end
-	end)
-
-	AddConnection(UserInputService.InputBegan, function(Input)
-		if Input.KeyCode == Enum.KeyCode.L and UIHidden then
 			MainWindow.Visible = true
 		end
 	end)
