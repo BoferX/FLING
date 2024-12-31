@@ -32,11 +32,6 @@ local request = (syn and syn.request) or (fluxus and fluxus.request) or (http an
 
 print('Sirius Analytics are '..(analytics and 'enabled.' or 'disabled.'))
 
-if analytics and not useStudio then
-	local reporter = loadstring(game:HttpGet("https://analytics.sirius.menu/reporter"))()
-	reporter.report("0193dbf8-7da1-79de-b399-2c0f68b0a9ad", Release, InterfaceBuild)
-end
-
 local RayfieldLibrary = {
 	Flags = {},
 	Theme = {
