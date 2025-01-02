@@ -1,0 +1,6 @@
+if SPY_LOADED == true then
+    -- error("Chat spy is already running!", 0)
+    return
+end
+pcall(function() getgenv().SPY_LOADED = true end)
+loadstring(game:HttpGet('https://raw.githubusercontent.com/HuyBla/my-roblox-scripts/refs/heads/main/ChatSpy.lua'))()
