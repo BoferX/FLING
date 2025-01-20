@@ -3180,9 +3180,11 @@ hideHotkeyConnection = UserInputService.InputBegan:Connect(function(input, proce
 		if Debounce then return end
 		if Hidden then
 			Hidden = false
+			game.UserInputService.MouseIconEnabled = true
 			Unhide()
 		else
 			Hidden = true
+			game.UserInputService.MouseIconEnabled = false
 			Hide()
 		end
 	end
@@ -3489,5 +3491,5 @@ task.delay(4, function()
 		Main.Notice.Visible = false 
 	end
 end)
-
+game.CoreGui.Rayfield.Drag.Interact.Modal = true	
 return RayfieldLibrary
