@@ -67,7 +67,7 @@ local RayfieldLibrary = {
 			ToggleEnabledOuterStroke = Color3.fromRGB(100, 100, 100),
 			ToggleDisabledOuterStroke = Color3.fromRGB(65, 65, 65),
 
-			DropdownSelected = Color3.fromRGB(105, 1-5, 175),
+			DropdownSelected = Color3.fromRGB(105, 105, 175),
 			DropdownUnselected = Color3.fromRGB(30, 30, 30),
 
 			InputBackground = Color3.fromRGB(30, 30, 30),
