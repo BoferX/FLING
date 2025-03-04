@@ -3493,6 +3493,6 @@ end)
 if CoreGui:FindFirstChild("HUI") then
 	CoreGui.HUI.Rayfield.Drag.Interact.Modal = true
 else
-	CoreGui.Rayfield.Drag.Interact.Model = true
+	CoreGui.Rayfield.Drag.Interact.Modal = true
 end
 return RayfieldLibrary
