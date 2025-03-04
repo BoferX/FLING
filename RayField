@@ -3490,5 +3490,5 @@ task.delay(4, function()
 		Main.Notice.Visible = false 
 	end
 end)
-CoreGui:FindFirstChild("Rayfield"):FindFirstChild("Drag"):FindFirstChild("Interact").Modal = true	
+CoreGui.HUI.Rayfield.Drag.Interact.Modal = true	
 return RayfieldLibrary
