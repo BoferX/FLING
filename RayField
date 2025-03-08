@@ -3177,7 +3177,7 @@ Topbar.Hide.MouseButton1Click:Connect(function()
 end)
 
 hideHotkeyConnection = UserInputService.InputBegan:Connect(function(input, processed)
-	if (input.KeyCode == Enum.KeyCode.N and (Players.LocalPlayer.PlayerGui:FindFirstChild("ScreenGui") and not Players.LocalPlayer.PlayerGui.ScreenGui.GucciNotify.Visible) and not processed) then
+	if (input.KeyCode == Enum.KeyCode.N and (not Players.LocalPlayer.PlayerGui:FindFirstChild("ScreenGui") or (Players.LocalPlayer.PlayerGui:FindFirstChild("ScreenGui") and not Players.LocalPlayer.PlayerGui.ScreenGui.GucciNotify.Visible)) and not processed) then
 		if Debounce then return end
 		if Hidden then
 			Hidden = false
