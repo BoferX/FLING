@@ -69,13 +69,14 @@ function ChatSpy.onChatted(targetPlayer, message)
 
         if (Hidden and ChatSpy.Enabled and not ChatSpy.checkIgnored(message)) then
             if (#message > 1200) then
-                message = message:sub(1200) .. "...";
+                message = message:sub(1200) .. "..."
             end
 			if message:sub(1,2) == "/w" then
 				local splited = message:split(" ")
 				for _,plr in pairs(Players:GetPlayers()) do
 					if plr.Name == splited[2] then
-						ChatSpy.Chat.Text = "{SPY} ["..targetPlayer.DisplayName.."]: /w "..plr.DisplayName.." "..message:sub(plr.Name:len()+3)
+						local _,len = string.find(message,plr.Name)
+						ChatSpy.Chat.Text = "{SPY} ["..targetPlayer.DisplayName.."]: /w "..plr.DisplayName..message:sub(len)
 					end
 				end
 			else
