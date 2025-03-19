@@ -76,7 +76,7 @@ function ChatSpy.onChatted(targetPlayer, message)
 				for _,plr in pairs(Players:GetPlayers()) do
 					if plr.Name == splited[2] then
 						local _,len = string.find(message,plr.Name)
-						ChatSpy.Chat.Text = "{SPY} ["..targetPlayer.DisplayName.."]: /w "..plr.DisplayName..message:sub(len)
+						ChatSpy.Chat.Text = "{SPY} ["..targetPlayer.DisplayName.."]: /w "..plr.DisplayName.." "..message:sub(len+1)
 					end
 				end
 			else
