@@ -18,6 +18,7 @@ getgenv().ChatSpy = {
     Enabled = true,
     SpyOnSelf = false,
     Public = false,
+    Count = 0,
     Chat = {
         Color  = Color3.fromRGB(0, 255, 255),
         Font = Enum.Font.SourceSansBold,
@@ -50,10 +51,15 @@ end
 
 function ChatSpy.onChatted(targetPlayer, message)
     if (targetPlayer == LocalPlayer and string.lower(message) == "/spy") then
-        if ChatSpy.Enabled then ChatSpy.Enabled = false else ChatSpy.Enabled = true end
-        ChatSpy.Chat.Text = "{SPY} - "..(ChatSpy.Enabled and "Enabled." or "Disabled.")
-
-        StarterGui:SetCore("ChatMakeSystemMessage", ChatSpy.Chat)
+	ChatSpy.Count = ChatSpy.Count + 1
+	if ChatSpy.Count < 2 then
+	        if ChatSpy.Enabled then ChatSpy.Enabled = false else ChatSpy.Enabled = true end
+	        ChatSpy.Chat.Text = "{SPY} - "..(ChatSpy.Enabled and "Enabled." or "Disabled.")
+	
+	        StarterGui:SetCore("ChatMakeSystemMessage", ChatSpy.Chat)
+	else
+		ChatSpy.Count = 0
+	end
     elseif (ChatSpy.Enabled and (ChatSpy.SpyOnSelf or targetPlayer ~= LocalPlayer)) then
         local message = message:gsub("[\n\r]",''):gsub("\t",' '):gsub("[ ]+",' ')
 
