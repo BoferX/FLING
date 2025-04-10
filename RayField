@@ -3490,9 +3490,9 @@ task.delay(4, function()
 		Main.Notice.Visible = false 
 	end
 end)
-if CoreGui:FindFirstChild("HUI"):FindFirstChild("Rayfield") then
-	CoreGui.HUI.Rayfield.Drag.Interact.Modal = true
+if game.CoreGui:FindFirstChild("HUI"):FindFirstChild("Rayfield") then
+	game.CoreGui.HUI.Rayfield.Drag.Interact.Modal = true
 else
-	CoreGui.Rayfield.Drag.Interact.Modal = true
+	game.CoreGui.Rayfield.Drag.Interact.Modal = true
 end
 return RayfieldLibrary
