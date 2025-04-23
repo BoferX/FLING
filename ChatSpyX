@@ -53,7 +53,7 @@ function ChatSpy.onChatted(targetPlayer, message)
     if (targetPlayer == LocalPlayer and string.lower(message) == "/spy") then
 	ChatSpy.Count = ChatSpy.Count + 1
 	if ChatSpy.Count < 2 then
-	        if ChatSpy.Enabled then ChatSpy.Enabled = false else ChatSpy.Enabled = true end
+	        ChatSpy.Enabled = not(ChatSpy.Enabled)
 	        ChatSpy.Chat.Text = "{SPY} - "..(ChatSpy.Enabled and "Enabled." or "Disabled.")
 		task.wait(0.55)
 	        StarterGui:SetCore("ChatMakeSystemMessage", ChatSpy.Chat)
