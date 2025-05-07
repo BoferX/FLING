@@ -8,7 +8,7 @@ local Struggle = rs.CharacterEvents.Struggle
 
 local ViewEscape  = me.PlayerGui.ControlsGui.PCFrame.Escape
 local ViewTime = me.PlayerGui.ControlsGui.PCFrame.EscapeTimer.TimeToEscape
-local Timer = 4
+local Timer = 3
 local HaveOwner = false
 local time = tick()
 
@@ -47,7 +47,7 @@ me.Character.Head.ChildRemoved:Connect(function(PartOwner)
 			end
 		end)
 		while true do
-			if Timer < 4 then
+			if Timer < 3 then
 				local char = me.Character or me.CharacterAdded:Wait()
 				local head = char:WaitForChild("Head")
 				if not(head:FindFirstChild("PartOwner")) then
@@ -108,7 +108,7 @@ me.CharacterAdded:Connect(function(char)
 				end
 			end)
 			while true do
-				if Timer < 4 then
+				if Timer < 3 then
 					if not HaveOwner then
 						if tick()-time <= 1 then
 							task.wait()
