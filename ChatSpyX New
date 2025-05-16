@@ -1,0 +1,119 @@
+if SPY_LOADED == true then return end
+pcall(function() getgenv().SPY_LOADED = true end)
+-- // Initialise
+--if (getgenv().ChatSpy) then return getgenv().ChatSpy; end;
+repeat wait() until game:GetService("ContentProvider").RequestQueueSize == 0
+repeat wait() until game:IsLoaded()
+
+-- // Vars
+local Players = game:GetService("Players")
+local StarterGui = game:GetService("StarterGui")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local LocalPlayer = Players.LocalPlayer
+local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+local TextChatService = game:GetService("TextChatService")
+getgenv().ChatSpy = {
+    Enabled = true,
+	EnabledTF = "",
+    SpyOnSelf = false,
+    Public = false,
+    Count = 0,
+	OnMsg = false,
+    Chat = {
+        Color  = Color3.fromRGB(0, 255, 255),
+        Font = Enum.Font.SourceSansBold,
+        TextSize = 18,
+        Text = "",
+    },
+    IgnoreList = {
+        {Message = ":part/1/1/1", ExactMatch = true},
+        {Message = ":part/10/10/10", ExactMatch = true},
+        {Message = "A?????????", ExactMatch = false},
+        {Message = ":colorshifttop 10000 0 0", ExactMatch = true},
+        {Message = ":colorshiftbottom 10000 0 0", ExactMatch = true},
+        {Message = ":colorshifttop 0 10000 0", ExactMatch = true},
+        {Message = ":colorshiftbottom 0 10000 0", ExactMatch = true},
+        {Message = ":colorshifttop 0 0 10000", ExactMatch = true},
+        {Message = ":colorshiftbottom 0 0 10000", ExactMatch = true},
+    },
+};
+
+-- // Function
+function ChatSpy.checkIgnored(message)
+    for i = 1, #ChatSpy.IgnoreList do
+        local v = ChatSpy.IgnoreList[i]
+        if (v.ExactMatch and message == v.Message) or (not v.ExactMatch and string.match(v.Message, message)) then 
+            return true
+        end
+    end
+    return false
+end
+
+function ChatSpy.onChatted(targetPlayer, message)
+    if (targetPlayer == LocalPlayer and string.lower(message) == "/spy") then
+	ChatSpy.Count = ChatSpy.Count + 1
+	if ChatSpy.Count < 2 then
+	    ChatSpy.Enabled = not(ChatSpy.Enabled)
+		ChatSpy.EnabledTF = ChatSpy.Enabled and "Enabled." or "Disabled."
+	    ChatSpy.Chat.Text = `<font color='#10e3df'>{"{SPY} - "..ChatSpy.EnabledTF}</font>`
+		task.wait(0.55)
+		TextChatService.TextChannels.RBXGeneral:DisplaySystemMessage(ChatSpy.Chat.Text)
+	else
+		ChatSpy.Count = 0
+	end
+    elseif (ChatSpy.Enabled and (ChatSpy.SpyOnSelf or targetPlayer ~= LocalPlayer)) then
+        local message = message:gsub("[\n\r]",''):gsub("\t",' '):gsub("[ ]+",' ')
+
+        local Hidden = true
+		local Connect = TextChatService.MessageReceived:Connect(function()
+			Hidden = false
+		end)
+
+        wait(0.5)
+		Connect:Disconnect()
+		Connect = nil
+
+        if (Hidden and ChatSpy.Enabled and not ChatSpy.checkIgnored(message)) then
+            if (#message > 1200) then
+                message = message:sub(1200) .. "..."
+            end
+			if message:sub(1,2) == "/w" then
+				for _,plr in pairs(Players:GetPlayers()) do
+					local msg, count = message:gsub(plr.Name,plr.DisplayName)
+					if count ~= 0 then
+						ChatSpy.Chat.Text = `<font color='#10e3df'>{"{SPY} ["..targetPlayer.DisplayName.."]: "..msg}</font>`
+						break
+					end
+				end
+			else
+				ChatSpy.Chat.Text = `<font color='#10e3df'>{"{SPY} ["..targetPlayer.DisplayName.."]: "..message}</font>`
+			end
+			TextChatService.TextChannels.RBXGeneral:DisplaySystemMessage(ChatSpy.Chat.Text)
+        end
+    end
+end
+
+-- // Handling Chats
+local AllPlayers = Players:GetPlayers()
+for i = 1, #AllPlayers do
+    local player = AllPlayers[i]
+    player.Chatted:Connect(function(message)
+        ChatSpy.onChatted(player, message)
+    end)
+end
+
+Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(message)
+        ChatSpy.onChatted(player, message)
+    end)
+end)
+
+-- // Initialise Text
+ChatSpy.EnabledTF = ChatSpy.Enabled and "Enabled." or "Disabled."
+ChatSpy.Chat.Text = `<font color='#10e3df'>{"{SPY} - "..ChatSpy.EnabledTF}</font>`
+TextChatService.TextChannels.RBXGeneral:DisplaySystemMessage(ChatSpy.Chat.Text)
+
+-- // Update Chat Frame
+local chatFrame = LocalPlayer.PlayerGui.Chat.Frame
+chatFrame.ChatChannelParentFrame.Visible = true
+chatFrame.ChatBarParentFrame.Position = chatFrame.ChatChannelParentFrame.Position + UDim2.new(UDim.new(), chatFrame.ChatChannelParentFrame.Size.Y)
