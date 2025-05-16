@@ -69,7 +69,7 @@ function ChatSpy.onChatted(targetPlayer, message)
 			Hidden = false
 		end)
 
-        wait(0.5)
+        wait(0.65)
 		Connect:Disconnect()
 		Connect = nil
 
