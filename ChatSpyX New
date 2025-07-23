@@ -11,7 +11,12 @@ local StarterGui = game:GetService("StarterGui")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local LocalPlayer = Players.LocalPlayer
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
-local TextChatService = game:GetService("TextChatService")
+local TextChatService, General = game:GetService("TextChatService")
+for _,v in pairs(TextChatService:GetChildren()) do
+	if v.Name == "TextChannels" and v:FindFirstChild("RBXGeneral") then
+		General = v.RBXGeneral
+	end
+end
 getgenv().ChatSpy = {
     Enabled = true,
 	EnabledTF = "",
@@ -57,7 +62,7 @@ function ChatSpy.onChatted(targetPlayer, message)
 		ChatSpy.EnabledTF = ChatSpy.Enabled and "Enabled." or "Disabled."
 	    ChatSpy.Chat.Text = `<font color='#10e3df'>{"{SPY} - "..ChatSpy.EnabledTF}</font>`
 		task.wait(0.55)
-		TextChatService.TextChannels.RBXGeneral:DisplaySystemMessage(ChatSpy.Chat.Text)
+		General:DisplaySystemMessage(ChatSpy.Chat.Text)
 	else
 		ChatSpy.Count = 0
 	end
@@ -88,7 +93,7 @@ function ChatSpy.onChatted(targetPlayer, message)
 			else
 				ChatSpy.Chat.Text = `<font color='#10e3df'>{"{SPY} ["..targetPlayer.DisplayName.."]: "..message}</font>`
 			end
-			TextChatService.TextChannels.RBXGeneral:DisplaySystemMessage(ChatSpy.Chat.Text)
+			General:DisplaySystemMessage(ChatSpy.Chat.Text)
         end
     end
 end
@@ -111,4 +116,4 @@ end)
 -- // Initialise Text
 ChatSpy.EnabledTF = ChatSpy.Enabled and "Enabled." or "Disabled."
 ChatSpy.Chat.Text = `<font color='#10e3df'>{"{SPY} - "..ChatSpy.EnabledTF}</font>`
-TextChatService.TextChannels.RBXGeneral:DisplaySystemMessage(ChatSpy.Chat.Text)
+General:DisplaySystemMessage(ChatSpy.Chat.Text)
