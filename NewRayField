@@ -3646,7 +3646,7 @@ end)
 
 hideHotkeyConnection = UserInputService.InputBegan:Connect(function(input, processed)
 	if (input.KeyCode == Enum.KeyCode[getSetting("General", "rayfieldOpen")]) and not processed then
-		local GUI = PlayerGui:FindFirstChild("INIT GUI")
+		local GUI = game.Players.LocalPlayer.PlayerGui:FindFirstChild("INIT GUI")
 		if Debounce (not GUI or (GUI and not GUI.GucciFrame.GucciNotify.Visible)) then return end
 		if Hidden then
 			Hidden = false
