@@ -3646,7 +3646,8 @@ end)
 
 hideHotkeyConnection = UserInputService.InputBegan:Connect(function(input, processed)
 	if (input.KeyCode == Enum.KeyCode[getSetting("General", "rayfieldOpen")]) and not processed then
-		if Debounce then return end
+		local GUI = PlayerGui:FindFirstChild("INIT GUI")
+		if Debounce (not GUI or (GUI and not GUI.GucciFrame.GucciNotify.Visible)) then return end
 		if Hidden then
 			Hidden = false
 			Unhide()
@@ -3734,7 +3735,7 @@ if CEnabled and Main:FindFirstChild('Notice') then
 	TweenService:Create(Main.Notice.Title, TweenInfo.new(0.5, Enum.EasingStyle.Exponential), {TextTransparency = 0.1}):Play()
 end
 
-task.delay(4, function()
+-- task.delay(4, function()
 	RayfieldLibrary.LoadConfiguration()
 	if Main:FindFirstChild('Notice') and Main.Notice.Visible then
 		TweenService:Create(Main.Notice, TweenInfo.new(0.5, Enum.EasingStyle.Exponential, Enum.EasingDirection.InOut), {Size = UDim2.new(0, 100, 0, 25), Position = UDim2.new(0.5, 0, 0, -100), BackgroundTransparency = 1}):Play()
@@ -3743,6 +3744,14 @@ task.delay(4, function()
 		task.wait(0.5)
 		Main.Notice.Visible = false
 	end
-end)
+-- end)
+
+if CoreGui:FindFirstChild("Rayfield") then
+	CoreGui.Rayfield.Drag.Interact.Modal = true
+else
+	if CoreGui:FindFirstChild("HUI") then
+		CoreGui.HUI.Rayfield.Drag.Interact.Modal = true
+	end
+end
 
 return RayfieldLibrary
