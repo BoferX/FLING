@@ -794,7 +794,7 @@ local function getIcon(name : string): {id: number, imageRectSize: Vector2, imag
 	local rirs = r[2]
 	local riro = r[3]
 
-	if type(r[1]) ~= "number" or type(rirs) ~= "table" or type(riro) ~= "table" then
+	if typeof(r[1]) ~= "number" or typeof(rirs) ~= "table" or typeof(riro) ~= "table" then
 		error("Lucide Icons: Internal error: Invalid auto-generated asset entry")
 	end
 
