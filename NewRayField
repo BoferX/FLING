@@ -1589,7 +1589,11 @@ function RayfieldLibrary:CreateWindow(Settings)
 		sendReport("window_created", Settings.Name or "Unknown")
 	end
 	local Passthrough = false
-	Topbar.Title.Text = Settings.Name
+	
+	Topbar.Title.Text = "<b>" .. Settings.Name .. "</b>"
+	Tobbar.Title.RichText = true
+	Tobbar.Title.Size = UDim2.new(0, 466, 0, 30)
+	Tobbar.Title.TextColor3 = Color3.fromRGB(0, 120, 210)
 
 	Main.Size = UDim2.new(0, 420, 0, 100)
 	Main.Visible = true
