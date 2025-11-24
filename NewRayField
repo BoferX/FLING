@@ -3467,6 +3467,7 @@ function RayfieldLibrary:CreateWindow(Settings)
 	Topbar.Divider.BackgroundColor3 = SelectedTheme.ElementStroke
 	Topbar.CornerRepair.BackgroundTransparency = 1
 	Topbar.Title.TextTransparency = 1
+	print(Topbar.Title.RichText)
 	Topbar.Title.RichText = true
 	Topbar.Title.Size = UDim2.new(0, 466, 0, 30)
 	Topbar.Title.TextColor3 = Color3.fromRGB(0, 120, 210)
