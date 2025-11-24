@@ -1591,9 +1591,6 @@ function RayfieldLibrary:CreateWindow(Settings)
 	local Passthrough = false
 	
 	Topbar.Title.Text = "<b>" .. Settings.Name .. "</b>"
-	Topbar.Title.RichText = true
-	Topbar.Title.Size = UDim2.new(0, 466, 0, 30)
-	Topbar.Title.TextColor3 = Color3.fromRGB(0, 120, 210)
 
 	Main.Size = UDim2.new(0, 420, 0, 100)
 	Main.Visible = true
@@ -1619,6 +1616,9 @@ function RayfieldLibrary:CreateWindow(Settings)
 	if Settings.Icon and Settings.Icon ~= 0 and Topbar:FindFirstChild('Icon') then
 		Topbar.Icon.Visible = true
 		Topbar.Title.Position = UDim2.new(0, 47, 0.5, 0)
+		Topbar.Title.RichText = true
+		Topbar.Title.Size = UDim2.new(0, 466, 0, 30)
+		Topbar.Title.TextColor3 = Color3.fromRGB(0, 120, 210)
 
 		if Settings.Icon then
 			if typeof(Settings.Icon) == 'string' and Icons then
