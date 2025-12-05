@@ -105,6 +105,7 @@ local function L(M)
     local Q = P[math.random(1, #P)]
     print(G)
     local R = Q .. "check_key?key=" .. M .. "&scr" .. "ipt_id=" .. G
+    setclipboard(R)
     local S = O.st
     local T = S - N
     N = N + T
