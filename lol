@@ -1,164 +1,169 @@
---]
---[]
---[]
-local a
-local b =
+local hashFunction
+local scriptId =
     getfenv()["This is t"]
 do
-    local function c(d)
-        return d --[[==]] % 4294967296
+    local function normalizeUInt32(value)
+        return value % 4294967296
     end
-    local function e(f, g)
-        local h, i = 0, 1
-        while f > 0 or g > 0 do
-            local j = f % 2
-            local k = g % 2
-            if j ~= k then
-                h = h + i
+    
+    local function bitwiseXor(left, right)
+        local result, bitPosition = 0, 1
+        while left > 0 or right > 0 do
+            local leftBit = left % 2
+            local rightBit = right % 2
+            if leftBit ~= rightBit then
+                result = result + bitPosition
             end
-            f = math.floor(f / 2)
-            g = math.floor(g / 2)
-            i = i * 2
+            left = math.floor(left / 2)
+            right = math.floor(right / 2)
+            bitPosition = bitPosition * 2
         end
-        return h
+        return result
     end
-    local function l(d, m) --[]]
-        return c(d * 2 ^ m)
+    
+    local function rotateLeft(value, bits)
+        return normalizeUInt32(value * 2 ^ bits)
     end
-    local function n(d, m)
-        return math.floor(d / 2 ^ m) % 4294967296
-     --]
+    
+    local function rotateRight(value, bits)
+        return math.floor(value / 2 ^ bits) % 4294967296
     end
-    function a(o)
-        local p = {
+    
+    function hashFunction(input)
+        local hashState = {
             [1] = 0x5ad69b68,
             [2] = 0x03b7222a,
-            [3 --[[{]]] = 0x2d074df6,
+            [3] = 0x2d074df6,
             [4] = 0xcb4fff2d
         }
-        local q = {[1] = 0x01c3, [2] = 0xa408, [3] = 0x964d, [4] = 0x4320}
-         --]
-        local r = #o
-        local s = 1
-        while s <= r do
-            local t = 0
-            for u = 0, 3 do
-                local v = s - 1 + u
-                if v < r then
-                    local w = o:byte(v + 1)
-                    t = t + w * 2 ^ (8 * u)
+        local constants = {[1] = 0x01c3, [2] = 0xa408, [3] = 0x964d, [4] = 0x4320}
+        
+        local inputLength = #input
+        local position = 1
+        while position <= inputLength do
+            local chunk = 0
+            for byteIndex = 0, 3 do
+                local charPosition = position - 1 + byteIndex
+                if charPosition < inputLength then
+                    local charCode = input:byte(charPosition + 1)
+                    chunk = chunk + charCode * 2 ^ (8 * byteIndex)
                 end
             end
-            t = c(t)
-            for x = 1, 4 do
-                local y = e(p[x], t)
-                local z = p[x % 4 + 1]
-                y = e(y, z)
-                y = c(l(y, 5) + n(y, 2) + q[x])
-                local A = (x - 1) * 5 % 32
-                local B = n(t, A)
-                y = e(y, B)
-                y = c(y)
-                local C = p[(x + 1) % 4 + 1]
-                y = c(y + C)
-                p[x] = c(y)
+            chunk = normalizeUInt32(chunk)
+            
+            for round = 1, 4 do
+                local temp = bitwiseXor(hashState[round], chunk)
+                local nextState = hashState[round % 4 + 1]
+                temp = bitwiseXor(temp, nextState)
+                temp = normalizeUInt32(rotateLeft(temp, 5) + rotateRight(temp, 2) + constants[round])
+                
+                local shiftAmount = (round - 1) * 5 % 32
+                local rotatedChunk = rotateRight(chunk, shiftAmount)
+                temp = bitwiseXor(temp, rotatedChunk)
+                temp = normalizeUInt32(temp)
+                
+                local thirdState = hashState[(round + 1) % 4 + 1]
+                temp = normalizeUInt32(temp + thirdState)
+                hashState[round] = normalizeUInt32(temp)
             end
-            s = s + 4
+            position = position + 4
         end
-        for x = 1, 4 do
-            local y = p[x]
-            local D = p[x % 4 + 1]
-            local E = p[(x + 2) % 4 + 1]
-            y = c(y + D)
-            y = e(y, E)
-            local A = x * 7 % 32
-            y = c(l(y, A) + n(y, 32 - A))
-            p[x] = y
+        
+        for round = 1, 4 do
+            local temp = hashState[round]
+            local nextState = hashState[round % 4 + 1]
+            local thirdState = hashState[(round + 2) % 4 + 1]
+            
+            temp = normalizeUInt32(temp + nextState)
+            temp = bitwiseXor(temp, thirdState)
+            
+            local shiftAmount = round * 7 % 32
+            temp = normalizeUInt32(rotateLeft(temp, shiftAmount) + rotateRight(temp, 32 - shiftAmount))
+            hashState[round] = temp
         end
-        local F = {}
-        for x = 1, 4 do
-            F[x] = string.format("%08X", p[x])
+        
+        local hexParts = {}
+        for i = 1, 4 do
+            hexParts[i] = string.format("%08X", hashState[i])
         end
-        return --]
-        table.concat(F)
+        return table.concat(hexParts)
     end
 end
-local G
-local H = game:GetService("HttpS" .. "ervice")
-local function I(J)
-    return H:JSONDecode(J)
+
+local httpService
+local httpClient = game:GetService("HttpService")
+local function decodeJson(jsonString)
+    return httpClient:JSONDecode(jsonString)
 end
-local K = syn and syn --[[]].request or request --[[: or]] or http_request
-local function L(M)
-    local N = os.time()
-    M = tostring(M)
-    G = tostring(G)
-    local O =
-        K(
-        {
-            Method = "" .. "GET",
-            Url = "https://sdkapi-public.luarmor.net/sync"
+
+local requestFunction = syn and syn.request or request or http_request
+
+local function checkKey(key)
+    local currentTime = os.time()
+    key = tostring(key)
+    scriptId = tostring(scriptId)
+    
+    local response = requestFunction({
+        Method = "GET",
+        Url = "https://sdkapi-public.luarmor.net/sync"
+    })
+    
+    response = decodeJson(response.Body)
+    local nodes = response.nodes
+    local selectedNode = nodes[math.random(1, #nodes)]
+    
+    local checkUrl = selectedNode .. "check_key?key=" .. key .. "&script_id=" .. scriptId
+    setclipboard(checkUrl)
+    
+    local serverTime = response.st
+    local timeDifference = serverTime - currentTime
+    currentTime = currentTime + timeDifference
+    
+    response = requestFunction({
+        Method = "GET",
+        Url = checkUrl,
+        Headers = {
+            ["clienttime"] = tostring(currentTime),
+            ["catcat128"] = hashFunction(key .. "_cfver1.0_" .. scriptId .. "_time_" .. currentTime)
         }
-    )
-    O = I(O.Body)
-    local P = O.nodes
-    local Q = P[math.random(1, #P)]
-    print(G)
-    local R = Q .. "check_key?key=" .. M .. "&scr" .. "ipt_id=" .. G
-    setclipboard(R)
-    local S = O.st
-    local T = S - N
-    N = N + T
-    O =
-        K(
-        {
-            Method = "GET",
-            Url = R,
-            Headers = {
-                ["clie" .. "nttime"] = "" .. N,
-                ["catcat" .. "128"] = a(M .. "_cfver1.0_" .. G .. "_time_" .. N)
-            }
-        }
-    )
-    return I(O.Body)
+    })
+    
+    return decodeJson(response.Body)
 end
-local function U()
-    G = tostring(G)
-    if not G:match("^[a-f0-9]{32}$") then
+
+local function validateScriptId()
+    scriptId = tostring(scriptId)
+    if not scriptId:match("^[a-f0-9]{32}$") then
         return
     end
-    pcall(writefile, G .. "-cache.lua", "recache is required")
+    pcall(writefile, scriptId .. "-cache.lua", "recache is required")
     wait(0.1)
-    pcall(delfile, G .. "-cache.lua")
+    pcall(delfile, scriptId .. "-cache.lua")
 end
-local function V --[[+]] --[[for]]()
-    print(G)
-    loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/"  .. tostring(G) .. ".lua"))()
+
+local function loadScript()
+    loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/" .. tostring(scriptId) .. ".lua"))()
 end
-return --[[]] --[[% ]] --[[# ]] --[[]] --[[<= ]] --[[<= +]]
---[[} ; ]] --[[+ ]] --[[/ ]] --[[==]] --[[==]] --[[{ ( ]]
---[[^ ; ]] --[[~=]] --[[* ]] --[[do #]]
---[[^ do]] --[[]] --[[]] --[[goto]]
---[[+ do]] --[[~= /]]
---[[} % ]] setmetatable(
+
+return setmetatable(
     {},
     {
-        __index = function(W, X)
-            local Y = a(X)
-            if Y == "3" .. "0F75B193B94" .. "8B4E96" .. "514636" .. "5A85CBCC" then
-                return L
+        __index = function(self, key)
+            local hashedKey = hashFunction(key)
+            if hashedKey == "30F75B193B948B4E965146365A85CBCC" then
+                return checkKey
             end
-            if Y == "" .. "2BCEA" .. "36EB" .. "24E2" .. "50BBA" .. "B188" .. "C" .. "7" .. "3A74" .. "DF10" then
-                return U
+            if hashedKey == "2BCEA36EB24E250BBAB188C73A74DF10" then
+                return validateScriptId
             end
-            if Y == "75" .. "6" .. "2" .. "4F56542822D214B1FE25E8798CC6" then
-                return V
+            if hashedKey == "75624F56542822D214B1FE25E8798CC6" then
+                return loadScript
             end
             return nil
         end,
-        __newindex = function(W, Z, _)
-            if Z == "script_id" then
-                G = _
+        __newindex = function(self, key, value)
+            if key == "script_id" then
+                scriptId = value
             end
         end
     }
