@@ -150,7 +150,7 @@ return setmetatable(
     {},
     {
         __index = function(self, key)
-            local hashedKey = "75624F56542822D214B1FE25E8798CC6"
+            local hashedKey = hashFunction(key)
             -- hashFunction(key)
             if hashedKey == "30F75B193B948B4E965146365A85CBCC" then
                 return checkKey
