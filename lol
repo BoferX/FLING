@@ -1,6 +1,16 @@
 local hashFunction
 local scriptId =
-    getfenv()["This is t"]
+    getfenv()[
+    "This is t" ..
+        "he key check libr" ..
+            --
+            "ary used by Luarmor," ..
+                " documentation can be" ..
+                    " view" ..
+                        "ed at h" ..
+                            "ttps://docs.luarmor." ..
+                                "net/luarm" .. "or-user-manual-and-" .. "f.a.q#key" .. "-check-library"
+]
 print(scriptId)
 do
     local function normalizeUInt32(value)
@@ -151,7 +161,7 @@ return setmetatable(
     {},
     {
         __index = function(self, key)
-            local hashedKey = "75624F56542822D214B1FE25E8798CC6"
+            local hashedKey = hashFunction(key)
             -- hashFunction(key)
             if hashedKey == "30F75B193B948B4E965146365A85CBCC" then
                 return checkKey
