@@ -1,16 +1,5 @@
 local hashFunction
-local scriptId =
-    getfenv()[
-    "This is t" ..
-        "he key check libr" ..
-            --
-            "ary used by Luarmor," ..
-                " documentation can be" ..
-                    " view" ..
-                        "ed at h" ..
-                            "ttps://docs.luarmor." ..
-                                "net/luarm" .. "or-user-manual-and-" .. "f.a.q#key" .. "-check-library"
-]
+local scriptId = "prenis"
 print(scriptId)
 do
     local function normalizeUInt32(value)
