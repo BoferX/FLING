@@ -128,7 +128,7 @@ local function checkKey(key)
             ["catcat128"] = hashFunction(key .. "_cfver1.0_" .. scriptId .. "_time_" .. currentTime)
         }
     })
-    print(decodeJson(response.Body))
+    for i,v in decodeJson(response.Body) do print(i, "=", v) end
     return decodeJson(response.Body)
 end
 
