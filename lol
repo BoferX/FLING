@@ -1,5 +1,5 @@
 local hashFunction
-local scriptId = "prenis"
+local scriptId = "7c73d8d72ff4c3fb8e856e3ce888966d"
 print(scriptId)
 do
     local function normalizeUInt32(value)
