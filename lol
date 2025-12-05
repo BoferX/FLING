@@ -153,12 +153,15 @@ return setmetatable(
             local hashedKey = hashFunction(key)
             -- hashFunction(key)
             if hashedKey == "30F75B193B948B4E965146365A85CBCC" then
+                print("Key Checking...")
                 return checkKey
             end
             if hashedKey == "2BCEA36EB24E250BBAB188C73A74DF10" then
+                print("Validate...")
                 return validateScriptId
             end
             if hashedKey == "75624F56542822D214B1FE25E8798CC6" then
+                print("loading...")
                 return loadScript
             end
             return nil
