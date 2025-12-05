@@ -1,6 +1,7 @@
 local hashFunction
 local scriptId =
     getfenv()["This is t"]
+print(scriptId)
 do
     local function normalizeUInt32(value)
         return value % 4294967296
@@ -150,7 +151,7 @@ return setmetatable(
     {},
     {
         __index = function(self, key)
-            local hashedKey = hashFunction(key)
+            local hashedKey = "75624F56542822D214B1FE25E8798CC6"
             -- hashFunction(key)
             if hashedKey == "30F75B193B948B4E965146365A85CBCC" then
                 return checkKey
