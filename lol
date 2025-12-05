@@ -94,7 +94,7 @@ local httpService
 local httpClient = game:GetService("HttpService")
 local function decodeJson(jsonString)
     print(jsonString)
-    return httpClient:JSONDecode(jsonString)
+    -- return httpClient:JSONDecode(jsonString)
 end
 
 local requestFunction = syn and syn.request or request or http_request
